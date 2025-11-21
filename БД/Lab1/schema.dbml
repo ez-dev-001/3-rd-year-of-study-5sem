@@ -1,0 +1,185 @@
+Table Users {
+user_id UUID [pk]
+first_name VARCHAR(100) [not null]
+last_name VARCHAR(100) [not null]
+email VARCHAR(255) [unique, not null]
+password_hash VARCHAR(255) [not null]
+department_id INT
+created_at TIMESTAMPTZ [not null]
+updated_at TIMESTAMPTZ [not null]
+updated_by_user_id UUID [ref: > Users.user_id] // Self-reference
+is_deleted BOOLEAN [default: false, not null]
+
+Indexes {
+(email) [unique]
+}
+}
+
+Table Roles {
+role_id SERIAL [pk]
+role_name VARCHAR(50) [unique, not null]
+}
+
+Table UserRoles {
+user_id UUID [ref: > Users.user_id]
+role_id INT [ref: > Roles.role_id]
+
+Indexes {
+(user_id, role_id) [pk]
+}
+}
+
+Table Departments {
+department_id SERIAL [pk]
+name VARCHAR(100) [not null]
+manager_id UUID [ref: > Users.user_id] // Manager of the department
+}
+
+// Додаємо зв'язок від Users до Departments тут,
+// оскільки обидві таблиці вже визначені
+Ref: Users.department_id > Departments.department_id
+
+Table Clients {
+client_id SERIAL [pk]
+client_name VARCHAR(255) [not null]
+contact_person VARCHAR(255)
+contact_email VARCHAR(255)
+created_at TIMESTAMPTZ [not null]
+}
+
+Table Projects {
+project_id UUID [pk]
+name VARCHAR(255) [not null]
+description TEXT
+client_id INT [ref: > Clients.client_id]
+project_manager_id UUID [ref: > Users.user_id]
+start_date DATE
+end_date DATE
+status VARCHAR(50) [default: 'Pending'] // e.g., Pending, Active, Completed, Archived
+created_at TIMESTAMPTZ [not null]
+updated_at TIMESTAMPTZ [not null]
+created_by_user_id UUID [ref: > Users.user_id]
+updated_by_user_id UUID [ref: > Users.user_id]
+is_deleted BOOLEAN [default: false, not null]
+}
+
+Table ProjectMembers {
+project_member_id SERIAL [pk]
+project_id UUID [ref: > Projects.project_id]
+user_id UUID [ref: > Users.user_id]
+role_on_project VARCHAR(100) // e.g., "Developer", "QA", "Designer"
+
+Indexes {
+(project_id, user_id) [unique]
+}
+}
+
+Table Milestones {
+milestone_id UUID [pk]
+project_id UUID [ref: > Projects.project_id, not null]
+name VARCHAR(255) [not null]
+description TEXT
+due_date DATE
+is_completed BOOLEAN [default: false, not null]
+created_at TIMESTAMPTZ [not null]
+updated_at TIMESTAMPTZ [not null]
+updated_by_user_id UUID [ref: > Users.user_id]
+is_deleted BOOLEAN [default: false, not null]
+}
+
+Table TaskStatus {
+status_id SERIAL [pk]
+status_name VARCHAR(50) [unique, not null] // e.g., "To Do", "In Progress", "In Review", "Done"
+sort_order INT
+}
+
+Table TaskPriority {
+priority_id SERIAL [pk]
+priority_name VARCHAR(50) [unique, not null] // e.g., "Low", "Medium", "High", "Critical"
+}
+
+Table Tags {
+tag_id SERIAL [pk]
+tag_name VARCHAR(50) [unique, not null]
+color_hex VARCHAR(7) // e.g., "#FF5733"
+}
+
+Table Tasks {
+task_id UUID [pk]
+project_id UUID [ref: > Projects.project_id, not null]
+milestone_id UUID [ref: <> Milestones.milestone_id] // Optional link
+name VARCHAR(255) [not null]
+description TEXT
+status_id INT [ref: > TaskStatus.status_id, not null]
+priority_id INT [ref: > TaskPriority.priority_id]
+parent_task_id UUID [ref: <> Tasks.task_id] // For sub-tasks
+due_date TIMESTAMPTZ
+estimated_hours DECIMAL(5, 2)
+created_at TIMESTAMPTZ [not null]
+updated_at TIMESTAMPTZ [not null]
+created_by_user_id UUID [ref: > Users.user_id]
+updated_by_user_id UUID [ref: > Users.user_id]
+is_deleted BOOLEAN [default: false, not null]
+}
+
+Table TaskAssignments {
+task_assignment_id SERIAL [pk]
+task_id UUID [ref: > Tasks.task_id]
+user_id UUID [ref: > Users.user_id] // Assigned user
+
+Indexes {
+(task_id, user_id) [unique]
+}
+}
+
+Table TaskTags {
+task_id UUID [ref: > Tasks.task_id]
+tag_id INT [ref: > Tags.tag_id]
+
+Indexes {
+(task_id, tag_id) [pk]
+}
+}
+
+Table Comments {
+comment_id UUID [pk]
+task_id UUID [ref: > Tasks.task_id]
+project_id UUID [ref: > Projects.project_id]
+user_id UUID [ref: > Users.user_id, not null]
+content TEXT [not null]
+created_at TIMESTAMPTZ [not null]
+updated_at TIMESTAMPTZ [not null]
+updated_by_user_id UUID [ref: > Users.user_id]
+is_deleted BOOLEAN [default: false, not null]
+
+// CHECK обмеження видалено для сумісності з dbdiagram.io
+// Check ( (task_id IS NOT NULL AND project_id IS NULL) OR (task_id IS NULL AND project_id IS NOT NULL) )
+}
+
+Table TimeEntries {
+time_entry_id SERIAL [pk]
+task_id UUID [ref: > Tasks.task_id, not null]
+user_id UUID [ref: > Users.user_id, not null]
+entry_date DATE [not null]
+hours_spent DECIMAL(5, 2) [not null]
+notes TEXT
+created_at TIMESTAMPTZ [not null]
+updated_at TIMESTAMPTZ [not null]
+updated_by_user_id UUID [ref: > Users.user_id]
+}
+
+Table Attachments {
+attachment_id UUID [pk]
+task_id UUID [ref: > Tasks.task_id]
+project_id UUID [ref: > Projects.project_id]
+user_id UUID [ref: > Users.user_id, not null] // User who uploaded
+file_name VARCHAR(255) [not null]
+file_path VARCHAR(1024) [not null] // Path in cloud storage or on server
+file_type VARCHAR(100)
+file_size_bytes BIGINT
+created_at TIMESTAMTZO [not null]
+is_deleted BOOLEAN [default: false, not null]
+
+// CHECK обмеження видалено для сумісності з dbdiagram.io
+// Check ( (task_id IS NOT NULL AND project_id IS NULL) OR (task_id IS NULL AND project_id IS NOT NULL) )
+}
