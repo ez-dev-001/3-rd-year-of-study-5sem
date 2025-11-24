@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="pages.xsd">
+    <!-- Приклад Порталу -->
+    <Page id="p01" authorize="true">
+        <Title>Ukr.net Portal</Title>
+        <Type>Portal</Type>
+        <Chars>
+            <Email>support@ukr.net</Email>
+            <Voting>Anonymous</Voting>
+            <Paid>false</Paid>
+        </Chars>
+    </Page>
+
+    <!-- Приклад Новин -->
+    <Page id="p02" authorize="false">
+        <Title>BBC News</Title>
+        <Type>News</Type>
+        <Chars>
+            <Email>editor@bbc.com</Email>
+            <HasNews>true</HasNews>
+            <Voting>None</Voting>
+            <Paid>true</Paid>
+        </Chars>
+    </Page>
+
+    <!-- Приклад Дзеркала -->
+    <Page id="p03" authorize="true">
+        <Title>Github Mirror</Title>
+        <Type>Mirror</Type>
+        <Chars>
+            <Email>admin@mirror.org</Email>
+            <HasArchive>true</HasArchive>
+            <Voting>Authorized</Voting>
+            <Paid>false</Paid>
+        </Chars>
+    </Page>
+
+    <!-- Приклад Реклами -->
+    <Page id="p04" authorize="false">
+        <Title>Buy Something</Title>
+        <Type>Advertising</Type>
+        <Chars>
+            <Voting>None</Voting>
+            <Paid>false</Paid>
+        </Chars>
+    </Page>
+</Site>

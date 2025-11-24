@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="Site">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Page" type="PageType" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="PageType">
+        <xs:sequence>
+            <xs:element name="Title" type="xs:string"/>
+            <xs:element name="Type" type="PageCategory"/>
+            <xs:element name="Chars" type="CharsType"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="authorize" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:simpleType name="PageCategory">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Advertising"/>
+            <xs:enumeration value="News"/>
+            <xs:enumeration value="Portal"/>
+            <xs:enumeration value="Mirror"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="CharsType">
+        <xs:sequence>
+            <xs:element name="Email" type="xs:string" minOccurs="0"/>
+            <xs:element name="HasNews" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="HasArchive" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="Voting" type="VotingType"/>
+            <xs:element name="Paid" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="VotingType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Anonymous"/>
+            <xs:enumeration value="Authorized"/>
+            <xs:enumeration value="None"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

@@ -1,0 +1,37 @@
+[
+  {
+    "type": "Basic",
+    "name": "Student",
+    "fee": 100.0,
+    "clients": 5000,
+    "param": 100
+  },
+  {
+    "type": "Internet",
+    "name": "SuperNet",
+    "fee": 350.0,
+    "clients": 12000,
+    "param": 50
+  },
+  {
+    "type": "Premium",
+    "name": "Gold_VIP",
+    "fee": 800.0,
+    "clients": 200,
+    "param": 1
+  },
+  {
+    "type": "Basic",
+    "name": "Social",
+    "fee": 50.0,
+    "clients": 20000,
+    "param": 30
+  },
+  {
+    "type": "Internet",
+    "name": "Gamer",
+    "fee": 450.0,
+    "clients": 3000,
+    "param": 100
+  }
+]

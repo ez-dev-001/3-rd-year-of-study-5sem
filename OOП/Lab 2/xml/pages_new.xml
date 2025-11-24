@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><SiteByTypes>
+    <TypeGroup name="Portal">
+        <PageItem id="p01" auth="true">
+            <Title>Ukr.net Portal</Title>
+        </PageItem>
+    </TypeGroup>
+    <TypeGroup name="News">
+        <PageItem id="p02" auth="false">
+            <Title>BBC News</Title>
+        </PageItem>
+    </TypeGroup>
+    <TypeGroup name="Mirror">
+        <PageItem id="p03" auth="true">
+            <Title>Github Mirror</Title>
+        </PageItem>
+    </TypeGroup>
+    <TypeGroup name="Advertising">
+        <PageItem id="p04" auth="false">
+            <Title>Buy Something</Title>
+        </PageItem>
+    </TypeGroup>
+</SiteByTypes>
